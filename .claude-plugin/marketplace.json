@@ -1,0 +1,18 @@
+{
+  "name": "agency-os-plugin",
+  "version": "1.0.0",
+  "description": "Single-plugin marketplace for the Agency OS — interview-driven Claude Code plugin for service businesses (MVV, Offer Stack, 8 Value Drivers, Sprint Framework).",
+  "owner": {
+    "name": "Wesley Longueira",
+    "email": "wesley@thevirtualedge.com",
+    "url": "https://thevirtualedge.com"
+  },
+  "plugins": [
+    {
+      "name": "agency-os",
+      "version": "0.1.0",
+      "description": "Agency Operating System — interview-driven plugin (CorePilot MVV, Offer Stack, 8 Value Drivers, Sprint Framework, Pillar tools).",
+      "source": "./agency-os"
+    }
+  ]
+}

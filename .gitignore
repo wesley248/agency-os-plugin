@@ -5,16 +5,16 @@ dist/
 .DS_Store
 
 # Student / instructor data — never commit populated memory
-memory/mvv.md
-memory/icp.md
-memory/offer-stack.md
-memory/value-drivers.md
-memory/automation-stack.md
-memory/audio-logo.md
-memory/methodology.md
-memory/lessons.md
-memory/clients/*
-!memory/clients/.gitkeep
+agency-os/memory/mvv.md
+agency-os/memory/icp.md
+agency-os/memory/offer-stack.md
+agency-os/memory/value-drivers.md
+agency-os/memory/automation-stack.md
+agency-os/memory/audio-logo.md
+agency-os/memory/methodology.md
+agency-os/memory/lessons.md
+agency-os/memory/clients/*
+!agency-os/memory/clients/.gitkeep
 
 # Defensive
 *.log

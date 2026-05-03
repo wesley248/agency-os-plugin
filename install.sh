@@ -11,7 +11,14 @@ MARKETPLACE_NAME="local-desktop-app-uploads"
 MARKETPLACE_DIR="${HOME}/.claude/plugins/marketplaces/${MARKETPLACE_NAME}"
 MARKETPLACE_JSON="${MARKETPLACE_DIR}/.claude-plugin/marketplace.json"
 TARGET="${MARKETPLACE_DIR}/${PLUGIN_NAME}"
-SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE="${REPO_ROOT}/agency-os"
+
+if [ ! -d "${SOURCE}" ]; then
+  echo "❌ Plugin source not found at ${SOURCE}"
+  echo "   Make sure you're running this from the repo root after unzipping."
+  exit 1
+fi
 
 echo "Installing Agency OS plugin..."
 echo "  Source: ${SOURCE}"
@@ -53,11 +60,7 @@ fi
 mkdir -p "$(dirname "${TARGET}")"
 cp -R "${SOURCE}" "${TARGET}"
 
-# Don't ship the dev/install scripts inside the install
-rm -f "${TARGET}/install.sh"
-rm -rf "${TARGET}/scripts"
-rm -rf "${TARGET}/dist"
-rm -rf "${TARGET}/.git"
+# Source already only contains agency-os/ contents — no dev scripts to strip
 
 # Register the plugin in marketplace.json (idempotent)
 python3 - "${MARKETPLACE_JSON}" <<'PYEOF'
