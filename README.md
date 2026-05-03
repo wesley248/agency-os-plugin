@@ -86,7 +86,7 @@ Two paths. **GitHub install is preferred** — auto-updates land in students' se
 In Claude Code, run these three commands once:
 
 ```
-/plugin marketplace add wesleylongueira/agency-os-plugin
+/plugin marketplace add wesley248/agency-os-plugin
 /plugin install agency-os@agency-os-plugin
 /plugin
 ```
