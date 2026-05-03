@@ -1,0 +1,24 @@
+# Build artifacts
+dist/
+
+# macOS
+.DS_Store
+
+# Student / instructor data — never commit populated memory
+memory/mvv.md
+memory/icp.md
+memory/offer-stack.md
+memory/value-drivers.md
+memory/automation-stack.md
+memory/audio-logo.md
+memory/methodology.md
+memory/lessons.md
+memory/clients/*
+!memory/clients/.gitkeep
+
+# Defensive
+*.log
+node_modules/
+.env*
+.venv/
+__pycache__/

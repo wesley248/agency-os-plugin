@@ -1,0 +1,11 @@
+{
+  "name": "agency-os",
+  "version": "0.1.0",
+  "description": "Agency Operating System — interview-driven Claude plugin that bootstraps a personalized agentic OS for service businesses (sales, delivery, marketing, ops personas plus daily workflows).",
+  "author": {
+    "name": "AI District",
+    "url": "https://aidistrict.com"
+  },
+  "homepage": "https://aidistrict.com/agency-accelerator",
+  "keywords": ["agency", "operating-system", "agents", "interview", "personas", "rainmaker"]
+}
