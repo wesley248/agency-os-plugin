@@ -29,6 +29,17 @@ All skills are namespaced with `agency-` (except the orchestrator) to avoid coll
 
 ## Architecture
 
+### Home base — `/agency-roadmap`
+
+The skill students return to whenever they feel lost. Run it to:
+
+- Take a 12-question assessment that produces a personalized roadmap
+- See progress across every layer (foundation, positioning, operations, engagement)
+- Get the single recommended next action
+- Track active client engagements and their current Sprint phase
+
+Two entry paths into the OS — `/setup-agency-os` for a structured linear bootstrap, or `/agency-roadmap` for assessment-driven navigation. Either path leads to the same place: a fully configured OS with personas, rhythms, and a Sprint Framework ready for clients.
+
 ### Layer 1 — Bootstrap Interviews (5 skills, run once)
 
 Mirrors the methodologies students already know:

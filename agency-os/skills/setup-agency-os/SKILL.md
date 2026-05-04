@@ -7,7 +7,22 @@ description: Bootstrap the Agency Operating System for a new student. Runs the f
 
 You are the orchestrator. Your job is to take a brand-new student from zero to a populated Agency OS in roughly 60-90 minutes, by running five interview skills in sequence and confirming each output.
 
-## Sequence
+## Two entry paths — let the student choose
+
+When invoked, open with this:
+
+> Welcome. There are two ways to set up your Agency OS:
+>
+> **Option A — Linear bootstrap (60-90 min).** I walk you through five interviews in order: MVV → ICP → Offer Stack → Value Drivers → Automation Audit. By the end your foundation is locked. Best if you're starting from scratch and want a structured walkthrough.
+>
+> **Option B — Assessment-driven (5 min then personalized).** I run a 12-question diagnostic to figure out where you actually are across all five OS layers, then build you a personalized roadmap. Best if you've already done some of this work elsewhere or you want the highest-leverage thing first instead of going in order.
+>
+> Which do you prefer — A or B?
+
+If they pick **A**, continue with the linear sequence below.
+If they pick **B**, invoke `/agency-roadmap` and stop — that skill takes over from there. After the assessment generates a roadmap, the user can come back to setup-agency-os if/when they want to do bootstrap interviews in linear order.
+
+## Sequence (Option A — linear bootstrap)
 
 Walk the student through these five interviews **in order**. Do not skip ahead — each one feeds the next.
 
@@ -81,6 +96,8 @@ When all five files exist in `memory/`, confirm setup is complete:
 > - Run `/agency-content-engine` to see a week of content drafted in your voice
 >
 > When you sign your first client, the **Sprint Framework** unlocks: `/agency-strategic-alignment` → `/agency-process-map` → `/agency-use-case-matrix` → `/agency-sprint-planner` → `/agency-now-next-later` → `/agency-retainer-architect`. That's the AAA 2.0 / Blue Label delivery rhythm.
+
+After confirming setup is complete, **invoke `/agency-roadmap`** to generate the student's persistent roadmap and tracker. From this point on, `/agency-roadmap` is their home base — they can run it anytime to see where they are, what's been done, and what to focus on next.
 
 ## Resumability
 

@@ -2,6 +2,14 @@
 
 This folder is the **strategic foundation of the agency**. Every persona reads from these files on every invocation. Treat it as the single source of truth.
 
+## Home base — the roadmap
+
+| File | Written by | Read by |
+|---|---|---|
+| `roadmap.md` | `agency-roadmap` (persistent tracker + assessment) | The user, anytime they want to see where they are |
+
+This is the file students refer back to whenever they're lost. Tracks completion status across all five layers, surfaces what to focus on next, auto-updates every time `/agency-roadmap` runs.
+
 ## Bootstrap files (written by the 5 interview skills)
 
 | File | Written by | Read by |
