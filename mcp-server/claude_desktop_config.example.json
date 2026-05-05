@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "agency-os": {
+      "command": "/Users/wesleylongueira/Desktop/agency-os-plugin/mcp-server/.venv/bin/python",
+      "args": [
+        "/Users/wesleylongueira/Desktop/agency-os-plugin/mcp-server/server.py"
+      ]
+    }
+  }
+}
