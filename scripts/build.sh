@@ -27,6 +27,10 @@ zip -r "${MARKETPLACE_ZIP}" . \
   -x ".git/*" \
   -x ".DS_Store" \
   -x "**/.DS_Store" \
+  -x "mcp-server/.venv/*" \
+  -x "**/.venv/*" \
+  -x "**/__pycache__/*" \
+  -x "**/*.pyc" \
   > /dev/null
 echo "✓ ${MARKETPLACE_ZIP}"
 echo "  Size: $(du -h "${MARKETPLACE_ZIP}" | cut -f1)"
