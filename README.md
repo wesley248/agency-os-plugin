@@ -29,16 +29,19 @@ All skills are namespaced with `agency-` (except the orchestrator) to avoid coll
 
 ## Architecture
 
-### Home base — `/agency-roadmap`
+### Home base — `/agency-roadmap` (live Kanban dashboard)
 
-The skill students return to whenever they feel lost. Run it to:
+Run `/agency-roadmap` (or say *"create my roadmap"* / *"where am I in setup"*) and a **live Kanban dashboard** opens as a Cowork artifact. 7 stages — Foundation → Positioning → Acquire → Engage → Deliver → Retain → Operate — with all 23 skills placed in their proper sequence.
 
-- Take a 12-question assessment that produces a personalized roadmap
-- See progress across every layer (foundation, positioning, operations, engagement)
-- Get the single recommended next action
-- Track active client engagements and their current Sprint phase
+- Cards show status (Available / In progress / Locked / Complete) and type (your input / agent run / persona)
+- Click a card to launch its slash command
+- Hover a card → "Mark done" toggle appears in the corner
+- Locked cards tell you which dependency is blocking them
+- Progress persists in localStorage on the student's machine
 
-Two entry paths into the OS — `/setup-agency-os` for a structured linear bootstrap, or `/agency-roadmap` for assessment-driven navigation. Either path leads to the same place: a fully configured OS with personas, rhythms, and a Sprint Framework ready for clients.
+Two entry paths into the OS — `/setup-agency-os` for the structured linear bootstrap, or `/agency-roadmap` to spawn the dashboard and pick the first available card. Either path leads to the same place: a configured OS with personas, rhythms, and a Sprint Framework ready for clients.
+
+The canonical dashboard lives at `agency-os/dashboards/agency-os-pathway.html`. The regeneration prompt — for recreating the dashboard from scratch in any Cowork session — lives at `prompts/create-agency-roadmap.md`.
 
 ### Layer 1 — Bootstrap Interviews (5 skills, run once)
 

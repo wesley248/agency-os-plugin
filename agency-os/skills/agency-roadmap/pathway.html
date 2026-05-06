@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agency OS pathway</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: #f7f5f0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position: 0 0;
+  color: #1a1a1a;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.app {
+  background: #fbfaf6;
+  margin: 24px;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 18px rgba(0,0,0,0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 48px);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 28px 18px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: #fbfaf6;
+}
+.folder-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.folder-icon svg { width: 100%; height: 100%; }
+.app-title-block { flex: 1; min-width: 0; }
+.app-title {
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.app-subtitle {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 2px 0 0;
+}
+.app-header-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.icon-btn:hover { background: rgba(0,0,0,0.04); }
+
+.meter-strip {
+  padding: 14px 28px 18px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fbfaf6;
+}
+.meter-text {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+.meter-text strong { color: #1a1a1a; font-weight: 500; }
+.bar { flex: 1; height: 4px; background: rgba(0,0,0,0.06); border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: #2563eb; transition: width 0.4s ease; }
+.bar-fill.done { background: #16a34a; }
+.legend { display: flex; gap: 14px; font-size: 11px; color: #9ca3af; flex-shrink: 0; }
+.legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.legend-dot { width: 7px; height: 7px; border-radius: 999px; display: inline-block; }
+.legend-dot.input { background: #f59e0b; }
+.legend-dot.agent { background: #2563eb; }
+.legend-dot.persona { background: #7c3aed; }
+.legend-dot.done { background: #16a34a; }
+
+.kanban-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 22px 28px 32px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.kanban {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  min-width: max-content;
+}
+
+.stage {
+  width: 280px;
+  flex-shrink: 0;
+}
+.stage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 14px;
+}
+.stage-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+  font-weight: 500;
+  background: rgba(255,255,255,0.6);
+}
+.stage-counter {
+  font-size: 11px;
+  color: #9ca3af;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.stage-cards { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  position: relative;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.02);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s, border-color 0.15s;
+  min-height: 64px;
+}
+.card:hover {
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+  border-color: rgba(0,0,0,0.1);
+}
+.card.locked { opacity: 0.5; cursor: default; }
+.card.locked:hover { box-shadow: 0 1px 3px rgba(0,0,0,0.05); transform: none; border-color: rgba(0,0,0,0.06); }
+.card.complete { background: #f6fbf7; border-color: rgba(22,163,74,0.18); }
+.card.in-progress { border-color: rgba(245,158,11,0.4); }
+
+.card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: #f5f3ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #6b7280;
+}
+.card.complete .card-icon { background: rgba(22,163,74,0.12); color: #15803d; }
+.card-icon svg { width: 16px; height: 16px; }
+
+.card-body { flex: 1; min-width: 0; padding-right: 18px; }
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.3;
+}
+.card-sub {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.card-sub-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.card-sub-dot.input { background: #f59e0b; }
+.card-sub-dot.agent { background: #2563eb; }
+.card-sub-dot.persona { background: #7c3aed; }
+.card-sub-dot.locked { background: #d1d5db; }
+
+.status-pill {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(37,99,235,0.15);
+}
+.status-pill.amber { background: #fef3c7; color: #b45309; box-shadow: 0 1px 2px rgba(245,158,11,0.15); }
+
+.corner-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.corner-icon.lock { color: #9ca3af; }
+.corner-icon.check {
+  background: #16a34a;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1a1a1a;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  z-index: 1000;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.empty-toggle {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 10px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  user-select: none;
+  opacity: 0;
+}
+.card:hover .empty-toggle { opacity: 1; }
+.empty-toggle:hover { background: rgba(0,0,0,0.05); color: #1a1a1a; }
+.card.complete .empty-toggle { opacity: 1; color: #15803d; }
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="app-header">
+    <div class="folder-icon">
+      <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9ec3eb"/>
+            <stop offset="1" stop-color="#6ba1d6"/>
+          </linearGradient>
+        </defs>
+        <path d="M5 10 Q5 8 7 8 H16 L19 11 H33 Q35 11 35 13 V29 Q35 32 32 32 H8 Q5 32 5 29 Z" fill="url(#g1)"/>
+        <path d="M5 14 H35 V29 Q35 32 32 32 H8 Q5 32 5 29 Z" fill="#bfdcf3" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="app-title-block">
+      <h1 class="app-title">How to build your agency</h1>
+      <p class="app-subtitle">Agency OS · Operating system pathway</p>
+    </div>
+    <div class="app-header-actions">
+      <button class="icon-btn" onclick="resetProgress()" title="Reset progress">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 8a6 6 0 1 0 1.76-4.24L2 5.5"/>
+          <path d="M2 2v3.5h3.5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="meter-strip">
+    <span class="meter-text"><strong id="meter-stat">0 of 23 complete</strong></span>
+    <div class="bar"><div class="bar-fill" id="bar-fill" style="width: 0%"></div></div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot input"></span>Your input</span>
+      <span class="legend-item"><span class="legend-dot agent"></span>Agent runs</span>
+      <span class="legend-item"><span class="legend-dot persona"></span>Persona</span>
+      <span class="legend-item"><span class="legend-dot done"></span>Done</span>
+    </div>
+  </div>
+
+  <div class="kanban-wrap">
+    <div class="kanban" id="kanban"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+// ------- ICON LIBRARY (small inline SVGs, currentColor) -------
+const I = {
+  compass: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M10.5 5.5l-1.4 3.6-3.6 1.4 1.4-3.6z"/></svg>',
+  user: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="2.5"/><path d="M3 13c.5-2.5 2.5-3.5 5-3.5s4.5 1 5 3.5"/></svg>',
+  layers: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l5.5 3-5.5 3-5.5-3z"/><path d="M2.5 8l5.5 3 5.5-3"/><path d="M2.5 11l5.5 3 5.5-3"/></svg>',
+  bars: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13V8M8 13V4M13 13v-6"/></svg>',
+  bolt: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2L4 9h3l-1 5 5-7H8z"/></svg>',
+  mic: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="4" height="7" rx="2"/><path d="M3.5 8a4.5 4.5 0 0 0 9 0M8 12.5V14"/></svg>',
+  framework: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="4" height="4"/><rect x="9.5" y="2.5" width="4" height="4"/><rect x="2.5" y="9.5" width="4" height="4"/><rect x="9.5" y="9.5" width="4" height="4"/></svg>',
+  megaphone: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6v4l9 3V3z"/><path d="M3 6H2v4h1"/></svg>',
+  pen: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2-8 8-2.5.5.5-2.5z"/></svg>',
+  handshake: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l3-3 2 2 3-3 4 4-2 2"/><path d="M8 9l-1 1.5"/></svg>',
+  doc: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h6l3 3v9H4z"/><path d="M10 2v3h3M6 8h5M6 11h5"/></svg>',
+  target: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2.5"/></svg>',
+  flow: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="3" cy="3" r="1.5"/><circle cx="13" cy="3" r="1.5"/><circle cx="3" cy="13" r="1.5"/><circle cx="13" cy="13" r="1.5"/><path d="M4.5 3H11.5M3 4.5V11.5M13 4.5V11.5M4.5 13H11.5"/></svg>',
+  matrix: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="11" height="11" rx="1"/><path d="M2.5 6h11M2.5 10h11M6 2.5v11M10 2.5v11"/></svg>',
+  sprint: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10l-2 3 4-1 5-5-3-3-5 5z"/><path d="M9 4l3 3"/></svg>',
+  ship: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11l1 2h10l1-2"/><path d="M3 11V6h10v5"/><path d="M5 6V4h6v2"/></svg>',
+  road: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2L3 14M11 2l2 12M8 2v2M8 7v2M8 12v2"/></svg>',
+  loop: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a5 5 0 0 1 10 0M13 8a5 5 0 0 1-10 0"/><path d="M3 6V8h2M13 10V8h-2"/></svg>',
+  sun: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M3.5 3.5l.7.7M11.8 11.8l.7.7M3.5 12.5l.7-.7M11.8 4.2l.7-.7"/></svg>',
+  cal: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="11" height="10" rx="1"/><path d="M2.5 6h11M5.5 2v3M10.5 2v3"/></svg>',
+  inbox: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9v3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"/><path d="M2 9l1.5-5h9L14 9"/><path d="M5 9h2l1 1.5h0L9 9h2"/></svg>',
+  cog: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2"/><path d="M8 2v1.5M8 12.5V14M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M2 8h1.5M12.5 8H14M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg>',
+  transcript: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"/><path d="M5 6h6M5 8.5h6M5 11h4"/></svg>'
+};
+
+// ------- DATA: STAGES → CARDS -------
+const STAGES = [
+  {
+    id: 'foundation', label: 'Stage 1 · Foundation', cards: [
+      { id: 'mvv', title: 'Mission, vision, values', icon: 'compass', cmd: '/agency-mvv', kind: 'input', deps: [] },
+      { id: 'icp', title: 'Ideal client profile', icon: 'user', cmd: '/agency-icp', kind: 'input', deps: ['mvv'] },
+      { id: 'offer', title: 'Offer stack', icon: 'layers', cmd: '/agency-offer-stack', kind: 'input', deps: ['mvv','icp'] },
+      { id: 'value-drivers', title: 'Value drivers', icon: 'bars', cmd: '/agency-value-drivers', kind: 'input', deps: ['offer'] },
+      { id: 'automation', title: 'Automation audit', icon: 'bolt', cmd: '/agency-automation-audit', kind: 'input', deps: ['mvv'] }
+    ]
+  },
+  {
+    id: 'positioning', label: 'Stage 2 · Positioning', cards: [
+      { id: 'audio-logo', title: 'Audio logo', icon: 'mic', cmd: '/agency-audio-logo', kind: 'input', deps: ['mvv','icp','offer'] },
+      { id: 'methodology', title: 'Signature methodology', icon: 'framework', cmd: '/agency-methodology', kind: 'input', deps: ['mvv','offer','value-drivers'] }
+    ]
+  },
+  {
+    id: 'acquire', label: 'Stage 3 · Acquire', cards: [
+      { id: 'head-of-marketing', title: 'Head of marketing', icon: 'megaphone', cmd: '/agency-head-of-marketing', kind: 'persona', deps: ['mvv','icp','offer','audio-logo'] },
+      { id: 'content-engine', title: 'Content engine', icon: 'pen', cmd: '/agency-content-engine', kind: 'agent', deps: ['mvv','icp','offer'] },
+      { id: 'head-of-sales', title: 'Head of sales', icon: 'handshake', cmd: '/agency-head-of-sales', kind: 'persona', deps: ['icp','offer','value-drivers'] },
+      { id: 'sprint-proposal', title: 'Sprint proposal', icon: 'doc', cmd: '/agency-sprint-proposal', kind: 'agent', deps: ['offer','value-drivers'] }
+    ]
+  },
+  {
+    id: 'engage', label: 'Stage 4 · Engage', cards: [
+      { id: 'strategic-alignment', title: 'Strategic alignment', icon: 'target', cmd: '/agency-strategic-alignment', kind: 'input', deps: ['head-of-sales'] },
+      { id: 'process-map', title: 'Process map', icon: 'flow', cmd: '/agency-process-map', kind: 'input', deps: ['strategic-alignment'] },
+      { id: 'use-case-matrix', title: 'Use case matrix', icon: 'matrix', cmd: '/agency-use-case-matrix', kind: 'agent', deps: ['process-map'] }
+    ]
+  },
+  {
+    id: 'deliver', label: 'Stage 5 · Deliver', cards: [
+      { id: 'sprint-planner', title: 'Sprint planner', icon: 'sprint', cmd: '/agency-sprint-planner', kind: 'input', deps: ['use-case-matrix'] },
+      { id: 'head-of-delivery', title: 'Head of delivery', icon: 'ship', cmd: '/agency-head-of-delivery', kind: 'persona', deps: ['sprint-planner'] },
+      { id: 'nnl', title: 'Now / next / later', icon: 'road', cmd: '/agency-now-next-later', kind: 'input', deps: ['sprint-planner'] }
+    ]
+  },
+  {
+    id: 'retain', label: 'Stage 6 · Retain', cards: [
+      { id: 'retainer-architect', title: 'Retainer architect', icon: 'loop', cmd: '/agency-retainer-architect', kind: 'input', deps: ['nnl'] }
+    ]
+  },
+  {
+    id: 'operate', label: 'Stage 7 · Operate', cards: [
+      { id: 'daily-standup', title: 'Daily standup', icon: 'sun', cmd: '/agency-daily-standup', kind: 'agent', deps: ['mvv','icp','offer'] },
+      { id: 'weekly-review', title: 'Weekly review', icon: 'cal', cmd: '/agency-weekly-review', kind: 'agent', deps: ['mvv','icp','offer'] },
+      { id: 'ea', title: 'Executive assistant', icon: 'inbox', cmd: '/agency-executive-assistant', kind: 'persona', deps: ['mvv'] },
+      { id: 'head-of-ops', title: 'Head of operations', icon: 'cog', cmd: '/agency-head-of-operations', kind: 'persona', deps: ['mvv','offer'] },
+      { id: 'transcript', title: 'Transcript processor', icon: 'transcript', cmd: '/agency-meeting-transcript-processor', kind: 'agent', deps: ['mvv','icp'] }
+    ]
+  }
+];
+
+const KIND_COPY = {
+  input: { label: 'Needs your input', dot: 'input' },
+  agent: { label: 'Agent can do this', dot: 'agent' },
+  persona: { label: 'Persona conversation', dot: 'persona' }
+};
+
+const STORAGE_KEY = 'agency-os-pathway-v2';
+
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch (e) { return {}; }
+}
+function saveProgress(p) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+}
+
+function isComplete(id, progress) { return progress[id] === 'complete'; }
+function isInProgress(id, progress) { return progress[id] === 'in-progress'; }
+
+function getCardStatus(card, progress) {
+  if (isComplete(card.id, progress)) return 'complete';
+  if (card.deps && card.deps.some(d => !isComplete(d, progress))) return 'locked';
+  if (isInProgress(card.id, progress)) return 'in-progress';
+  return 'available';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function handleCardClick(card, status) {
+  if (status === 'locked') {
+    const blockers = card.deps.filter(d => !isComplete(d, loadProgress())).join(', ');
+    showToast(`Locked — finish ${blockers} first`);
+    return;
+  }
+  // Try to send to chat directly if the host exposes it; else copy to clipboard
+  const cmd = card.cmd;
+  let sent = false;
+  try {
+    if (typeof window.sendPrompt === 'function') {
+      window.sendPrompt(cmd);
+      sent = true;
+    } else if (window.cowork && typeof window.cowork.sendPrompt === 'function') {
+      window.cowork.sendPrompt(cmd);
+      sent = true;
+    }
+  } catch (e) { /* fall through to clipboard */ }
+  if (sent) {
+    // Mark in-progress optimistically
+    const p = loadProgress();
+    if (!isComplete(card.id, p)) { p[card.id] = 'in-progress'; saveProgress(p); render(); }
+    showToast(`Started → ${cmd}`);
+  } else {
+    navigator.clipboard.writeText(cmd).then(() => {
+      const p = loadProgress();
+      if (!isComplete(card.id, p)) { p[card.id] = 'in-progress'; saveProgress(p); render(); }
+      showToast(`Copied ${cmd} — paste in chat to run`);
+    }).catch(() => {
+      showToast(`Type ${cmd} in chat to run`);
+    });
+  }
+}
+
+function toggleComplete(id, ev) {
+  ev.stopPropagation();
+  const p = loadProgress();
+  if (p[id] === 'complete') { delete p[id]; }
+  else { p[id] = 'complete'; }
+  saveProgress(p);
+  render();
+}
+
+function resetProgress() {
+  if (!confirm('Reset all progress? Your memory files in /memory aren’t touched — this only clears the checkboxes here.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+function render() {
+  const progress = loadProgress();
+  const kanban = document.getElementById('kanban');
+  kanban.innerHTML = '';
+
+  let totalCards = 0, totalDone = 0;
+
+  STAGES.forEach(stage => {
+    const stageEl = document.createElement('div');
+    stageEl.className = 'stage';
+
+    let stageDone = 0;
+    const cardsHtml = stage.cards.map(card => {
+      totalCards++;
+      const status = getCardStatus(card, progress);
+      if (status === 'complete') { totalDone++; stageDone++; }
+
+      const kind = KIND_COPY[card.kind];
+      let subLabel, subDot;
+      if (status === 'complete') { subLabel = 'Complete'; subDot = 'agent'; }
+      else if (status === 'locked') { subLabel = 'Needs earlier steps first'; subDot = 'locked'; }
+      else if (status === 'in-progress') { subLabel = 'In progress'; subDot = kind.dot; }
+      else { subLabel = kind.label; subDot = kind.dot; }
+
+      let corner = '';
+      if (status === 'complete') {
+        corner = `<div class="corner-icon check" title="Complete">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5l2.5 2.5 4.5-5.5"/></svg>
+        </div>`;
+      } else if (status === 'locked') {
+        corner = `<div class="corner-icon lock" title="Locked">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>
+        </div>`;
+      } else if (status === 'available') {
+        corner = '<div class="status-pill">Available</div>';
+      } else if (status === 'in-progress') {
+        corner = '<div class="status-pill amber">In progress</div>';
+      }
+
+      const toggleLabel = status === 'complete' ? 'Mark not done' : (status === 'locked' ? '' : 'Mark done');
+
+      return `
+        <div class="card ${status}" data-id="${card.id}">
+          <div class="card-icon">${I[card.icon] || ''}</div>
+          <div class="card-body">
+            <div class="card-title">${card.title}</div>
+            <div class="card-sub"><span class="card-sub-dot ${subDot}"></span>${subLabel}</div>
+          </div>
+          ${corner}
+          ${toggleLabel ? `<span class="empty-toggle" data-toggle="${card.id}">${toggleLabel}</span>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    stageEl.innerHTML = `
+      <div class="stage-head">
+        <span class="stage-label">${stage.label}</span>
+        <span class="stage-counter">${stageDone}/${stage.cards.length}</span>
+      </div>
+      <div class="stage-cards">${cardsHtml}</div>
+    `;
+
+    kanban.appendChild(stageEl);
+  });
+
+  // Wire interactions
+  document.querySelectorAll('.card').forEach(el => {
+    const id = el.dataset.id;
+    const card = STAGES.flatMap(s => s.cards).find(c => c.id === id);
+    el.addEventListener('click', (ev) => {
+      // Ignore clicks that started on the toggle
+      if (ev.target.closest('[data-toggle]')) return;
+      const status = getCardStatus(card, loadProgress());
+      handleCardClick(card, status);
+    });
+  });
+  document.querySelectorAll('[data-toggle]').forEach(el => {
+    el.addEventListener('click', (ev) => toggleComplete(el.dataset.toggle, ev));
+  });
+
+  // Update meter
+  document.getElementById('meter-stat').textContent = `${totalDone} of ${totalCards} complete`;
+  const fill = document.getElementById('bar-fill');
+  fill.style.width = `${(totalDone / totalCards) * 100}%`;
+  if (totalDone === totalCards) fill.classList.add('done'); else fill.classList.remove('done');
+}
+
+render();
+</script>
+</body>
+</html>

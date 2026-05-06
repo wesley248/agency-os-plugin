@@ -5,8 +5,6 @@ dist/
 .DS_Store
 
 # Student / instructor data — never commit populated memory
-agency-os/memory/roadmap.md
-agency-os/memory/roadmap.md.bak.*
 agency-os/memory/mvv.md
 agency-os/memory/icp.md
 agency-os/memory/offer-stack.md

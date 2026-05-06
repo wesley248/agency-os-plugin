@@ -46,6 +46,19 @@ Walk the student through these five interviews **in order**. Do not skip ahead �
    Output: `memory/automation-stack.md`
    What's automated, what's manual, where AI plugs in.
 
+## Visual progress — the live dashboard
+
+At any point during or after setup, the student can spawn a live Kanban dashboard of the entire Agency OS journey by saying:
+
+- "create my roadmap"
+- "show me the roadmap"
+- "agency roadmap"
+- "where am I in setup"
+
+This routes to the `agency-roadmap` skill and renders a 7-stage pathway (Foundation → Positioning → Acquire → Engage → Deliver → Retain → Operate) with all 23 skills placed in their proper sequence. Cards lock until prerequisites are complete; the student can mark steps done as we go and watch the meter advance.
+
+If they haven't seen it yet, mention it after the MVV interview — it gives them visual proof of forward motion early in what is otherwise a long session.
+
 ## Advanced (after bootstrap) — Sprint Framework
 
 Once the bootstrap is done and the agency has its first client, point the student at the **Sprint Framework** — the Blue Label / AAA 2.0 delivery methodology. Six skills, used per-client-engagement (not bootstrap):

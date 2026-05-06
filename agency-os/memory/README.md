@@ -2,13 +2,11 @@
 
 This folder is the **strategic foundation of the agency**. Every persona reads from these files on every invocation. Treat it as the single source of truth.
 
-## Home base — the roadmap
+## Home base — the live dashboard
 
-| File | Written by | Read by |
-|---|---|---|
-| `roadmap.md` | `agency-roadmap` (persistent tracker + assessment) | The user, anytime they want to see where they are |
+The Agency OS home base is a **live Kanban dashboard** spawned by the `agency-roadmap` skill, not a markdown file. Say *"create my roadmap"* (or any of the trigger phrases in the skill) and a 7-stage pathway opens as a Cowork artifact. Click cards to launch their slash commands. Mark cards done as you go. Progress persists in localStorage on the student's machine — no memory file is written.
 
-This is the file students refer back to whenever they're lost. Tracks completion status across all five layers, surfaces what to focus on next, auto-updates every time `/agency-roadmap` runs.
+The canonical dashboard lives at `agency-os/dashboards/agency-os-pathway.html` (and is bundled into the skill folder for offline launch). The regeneration prompt lives at `prompts/create-agency-roadmap.md` at the repo root.
 
 ## Bootstrap files (written by the 5 interview skills)
 
